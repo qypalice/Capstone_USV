@@ -21,7 +21,8 @@ class Koopman_numpy:
                 else:
                     self.de['bias'].append(param)
         if 'K.layer.mask' in params:
-            K = 0.5*params['K.layer.weight']*params['K.layer.mask']
+            K = params['K.layer.weight']*params['K.layer.mask']
+            #K = 0.5*params['K.layer.weight']*params['K.layer.mask']
             #for i in range(K.shape[0]-1):
                 #K[i,i+1] = 1
         else:
@@ -35,8 +36,8 @@ class Koopman_numpy:
         for i in range(len(self.en['weight'])):
             lifted_x = self.en['weight'][i]@lifted_x+self.en['bias'][i]
             lifted_x = relu(lifted_x)
-        #x = np.r_[x,lifted_x]
-        return lifted_x#x
+        x = np.r_[x,lifted_x]
+        return x
 
     def decode(self,x):
         for i in range(len(self.de['weight'])):

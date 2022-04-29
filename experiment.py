@@ -11,7 +11,7 @@ if __name__ == '__main__':
     # create dataset (optional)
     x_range = np.array([2.,2.,np.pi])
     u_range = np.array([1.5,0.5])
-    SimLength=20
+    SimLength=10
     Ntraj = 300000
     Ts=0.1
     path = produce_dataset(x_range,u_range,SimLength,Ntraj,Ts)
@@ -19,10 +19,10 @@ if __name__ == '__main__':
     print(path)
     dataset_plot(path,num=500)
     # get parameters
-    K = 10
+    K = 8
     arg = {
         'encoder':[3,32,64,K],
-        'decoder':[K,128,64,32,3],
+        'decoder':[K+3,128,64,32,3],
         'hyper':[1.0,3.0,0.3,1e-7,1e-7,1e-7,10]
     }
 

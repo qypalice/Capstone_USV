@@ -12,12 +12,12 @@ class masked_Linear(nn.Module):
         self.in_features = in_features
         self.out_features = out_features
         self.mask = torch.zeros([out_features, in_features])
-        for i in range(out_features-1):
-            self.mask[i,i] = 2
+        for i in range(out_features):
+            self.mask[i,i] = 1
             #if i%2==0:
                 #self.mask[i,i+1] = 1
         #self.mask[-1,-3] = 1
-        self.mask[:,-2:] = 2
+        self.mask[:,-2:] = 1
         self.mask = Parameter(self.mask)
         self.weight = Parameter(torch.Tensor(out_features, in_features))
         if bias:

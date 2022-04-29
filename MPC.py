@@ -32,7 +32,7 @@ def simulate_path(init_x,SimLength):
     s3 = 3*SimLength/4
     interval = SimLength/8
     for i in range(SimLength):
-        if i<interval:# go east
+        '''if i<interval:# go east
             X[:,i+1] = X[:,i]+0.1*np.array([1,0])
         elif i<2*interval:
             X[:,i+1] = X[:,i]+0.1*np.array([1,1])
@@ -47,7 +47,9 @@ def simulate_path(init_x,SimLength):
         elif i<7*interval:# go south
             X[:,i+1] = X[:,i]+0.1*np.array([0,-1])
         else:
-            X[:,i+1] = X[:,i]+0.1*np.array([1,-1])
+            X[:,i+1] = X[:,i]+0.1*np.array([1,-1])'''
+        theta = 1.5*(i+1)*pi/SimLength-pi
+        X[:,i+1] = np.array([2*np.cos(theta),2*np.sin(theta)])
         X[:,i+1] = np.maximum(X[:,i+1],x_min)
         X[:,i+1] = np.minimum(X[:,i+1],x_max)
     path = f'./dataset/MPC/SimLenth_{str(SimLength)}_Ts_{str(Ts)}'
@@ -288,6 +290,13 @@ def MPC_control_process_closed(model_file,ref,init_input,init_state,Q,R,rho,Nc,t
             angle = angle - 2*pi*(np.ones((1,angle.shape[0]))-np.tri(1,angle.shape[0],i))[0]'''
     print(angle)
     ref = np.r_[ref,np.c_[init_state[2],np.array([angle])]]
+    temp = np.zeros((3,0))
+    temp = np.c_[temp,ref[:,0]]
+    for i in range(1,ref.shape[1]):
+        if ref[2,i]!=ref[2,i-1]:
+            temp = np.c_[temp,[ref[0,i-1],ref[1,i-1],ref[2,i]]]
+        temp = np.c_[temp,ref[:,i]]
+    ref = temp
     
     # lift the reference
     lifted_ref = np.zeros((L,ref.shape[1]))
@@ -322,7 +331,7 @@ def MPC_control_process_closed(model_file,ref,init_input,init_state,Q,R,rho,Nc,t
             elif x[2]-ref[2,i]<=-2*pi:
                 x[2] = x[2]+2*pi
                 y = operater.encode(x)
-            if j < 5: # set parameter
+            if i < 2: # set parameter
                 Isplot = True
             else:
                 Isplot = False
