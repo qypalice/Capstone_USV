@@ -57,8 +57,8 @@ class encoder(nn.Module):
 
     def forward(self, x):
         lifted_x = self.layers(x)
-        #x = torch.cat((x,lifted_x),-1)
-        return lifted_x
+        x = torch.cat((x,lifted_x),-1)
+        return x
 
 class decoder(nn.Module):
     def __init__(self,struct):

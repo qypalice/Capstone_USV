@@ -26,7 +26,7 @@ if __name__ == '__main__':
         'hyper':[1.0,3.0,0.3,1e-7,1e-7,1e-7,10]
     }
 
-    epochs = 200
+    epochs = 500
     batch_size = 10
     # get dataloaders
     train_loader, val_loader, test_loader = get_dataloaders(path,batch_size)
