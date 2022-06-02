@@ -17,7 +17,7 @@ def test_the_model(test_loader, file_name):
     # set model
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
     model = Koopman(en,de)
-    loss_function = Loss(hyper[0], hyper[1], hyper[2], hyper[3], hyper[4], hyper[5], int(hyper[6]))
+    loss_function = Loss(hyper[0], hyper[1], hyper[2], hyper[3], hyper[4], hyper[5], hyper[6], int(hyper[7]))
     mse = torch.nn.MSELoss()
     saved_model_path = './weight/{}_checkpoint.pt'.format(file_name)
     checkpoint = Checkpoint(saved_model_path)

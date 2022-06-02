@@ -205,7 +205,7 @@ def train_the_model(train_loader, val_loader, arg, batch_size=10,epochs=200):
 
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
     model = Koopman(en,de)
-    loss_function = Loss(hyper[0], hyper[1], hyper[2], hyper[3], hyper[4], hyper[5], hyper[6])
+    loss_function = Loss(hyper[0], hyper[1], hyper[2], hyper[3], hyper[4], hyper[5], hyper[6], int(hyper[7]))
 
     trainer = Trainer(device, model, loss_function, train_loader, val_loader, batch_size)
     print(f'Trainer created.', end = "\n")

@@ -104,7 +104,7 @@ class Koopman(nn.Module):
         return prediction
     
 class Loss(nn.Module):
-    def __init__(self,a1, a2, a3, a4, a5, a6, P):
+    def __init__(self,a1, a2, a3, a4, a5, a6, a7, P):
         super(Loss, self).__init__()
         self.a1 = a1
         self.a2 = a2
@@ -112,6 +112,7 @@ class Loss(nn.Module):
         self.a4 = a4
         self.a5 = a5
         self.a6 = a6
+        self.a7 = a7
         self.P = P
 
     def forward(self, model,x,u):
@@ -140,6 +141,7 @@ class Loss(nn.Module):
         Lxo = 0
         Lox = 0
         Loo = 0
+        Lco = 0
         K_i_en_x = en(x[:,0,:])
         en_x = en(x)
         de_en_x = de(en_x)
@@ -148,6 +150,7 @@ class Loss(nn.Module):
             pred = de(K_i_en_x)
             Lxx += mse(x[:,i+1,:2],pred[:,:2])*k+mse(x[:,i+1,2],pred[:,2])
             Lxo += mse(en_x[:,i+1,:],K_i_en_x)
+            Lco += mse(x[:,i+1,:3],K_i_en_x[:,:3])
             Lox += mse(x[:,i+1,:2],de_en_x[:,i+1,:2])*k+mse(x[:,i+1,2],de_en_x[:,i+1,2])
             Loo += torch.norm(x[:,i+1,:]-pred,p=float("inf"))+torch.norm(x[:,i+1,:]-de_en_x[:,i+1,:],p=float('inf'))
         ave = x.size(0)*self.P
@@ -155,6 +158,7 @@ class Loss(nn.Module):
         Lxo /= ave
         Lox /= ave
         Loo /= ave
+        Lco /= ave
 
         # get regularization
         L2_en = 0
@@ -165,7 +169,7 @@ class Loss(nn.Module):
             L2_de += (param ** 2).sum()  
 
         # get the sum
-        loss = self.a1*Lox + self.a2*Lxx + self.a3*k*Lxo + self.a4*k*Loo + self.a5*L2_en + self.a6*L2_de
+        loss = self.a1*Lox + self.a2*Lxx + self.a3*k*Lxo + self.a4*k*Loo + self.a5*L2_en + self.a6*L2_de + self.a7*Lco
         return loss
 
 class Loss_new(nn.Module):
