@@ -150,7 +150,7 @@ class Loss(nn.Module):
             pred = de(K_i_en_x)
             Lxx += mse(x[:,i+1,:2],pred[:,:2])*k+mse(x[:,i+1,2],pred[:,2])
             Lxo += mse(en_x[:,i+1,:],K_i_en_x)
-            Lco += mse(x[:,i+1,:3],K_i_en_x[:,:3])
+            #Lco += mse(x[:,i+1,:3],K_i_en_x[:,:3])
             Lox += mse(x[:,i+1,:2],de_en_x[:,i+1,:2])*k+mse(x[:,i+1,2],de_en_x[:,i+1,2])
             Loo += torch.norm(x[:,i+1,:]-pred,p=float("inf"))+torch.norm(x[:,i+1,:]-de_en_x[:,i+1,:],p=float('inf'))
         ave = x.size(0)*self.P

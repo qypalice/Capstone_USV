@@ -95,7 +95,8 @@ class Trainer(metaclass=ABCMeta):
         self.train_loader = train_loader
         self.val_loader = val_loader
         self.batch_size = batch_size
-        self.optimizer = torch.optim.Adadelta(self.model.parameters(),lr=0.1, rho=0.8)
+        #self.optimizer = torch.optim.Adadelta(self.model.parameters(),lr=0.1, rho=0.8)
+        self.optimizer = torch.optim.Adadelta(self.model.parameters(),lr=0.01, rho=0.8)
 
     def train(self,  epochs,  checkpoint,  csv_logger):
         # initialize parameters
@@ -104,7 +105,7 @@ class Trainer(metaclass=ABCMeta):
         print("old model loaded.")
 
         # start training
-        patience = min(int(epochs*0.5),30)
+        patience = min(int(epochs*0.5),100)
         train_loss = []
         val_loss  = []    
 
